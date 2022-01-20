@@ -44,6 +44,7 @@ export default class GridEditing extends crsbinding.classes.ViewBase {
         this.setProperty("rowCount", 10);
         this.setProperty("progressMax", 100);
         this.setProperty("progress", 0);
+        this.setProperty("currentStep", "Please generate data to proceed");
     }
 
     /**
@@ -52,5 +53,6 @@ export default class GridEditing extends crsbinding.classes.ViewBase {
      */
     async update() {
         console.log(this.records);
+        console.log(this.grouping);
     }
 }

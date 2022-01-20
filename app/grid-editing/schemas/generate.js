@@ -26,7 +26,24 @@ export const gridGenerateSchema = {
                     bId: "$bId",
                     target: "$context.records"
                 },
-                next_step: "update"
+                next_step: "group_data",
+                binding_before: {
+                    currentStep: "generating data"
+                }
+            },
+
+            group_data: {
+                type: "data",
+                action: "group",
+                args: {
+                    source: "$context.records",
+                    fields: ["externalCode", "number"],
+                    target: "$context.grouping"
+                },
+                next_step: "update",
+                binding_before: {
+                    currentStep: "grouping data"
+                }
             },
 
             update: {
@@ -34,6 +51,9 @@ export const gridGenerateSchema = {
                 action: "$context.update",
                 args: {
                     parameters: []
+                },
+                binding_before: {
+                    currentStep: "done"
                 }
             }
         }
