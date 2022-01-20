@@ -28,12 +28,48 @@
         width: 100vw;
         z-index: -2;
     }
+
+    main-menu ul {
+        padding: 0.5rem;
+        margin: 0;
+        list-style-type: none;
+    }
+
+    main-menu li:hover {
+        background: var(--cl-highlight-b);
+        color: var(--cl-highlight-f);
+    }
+
+    main-menu a {
+        display: block;
+        padding: 0.5rem;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        text-decoration: none;
+    }
+
+    main-menu a:visited, main-menu a:hover {
+        color: inherit;
+    }
+
+    main-menu h2 {
+        margin: 0;
+        border-bottom: solid 1px silver;
+        padding: 0.5rem;
+        font-size: 1.2rem;
+        background: var(--cl-highlight-b);
+        color: var(--cl-highlight-f);
+    }
 </style>
 
 <template id="menu-item-template">
-    <li data-hash="${hash}">${title}</li>
+    <li>
+        <a href="${hash}">${title}</a>
+    </li>
 </template>
 
+<h2>Navigation</h2>
 <nav>
     <ul></ul>
 </nav>
