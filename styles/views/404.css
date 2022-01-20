@@ -1,0 +1,11 @@
+h2 {
+    text-align: center;
+    color: var(--cl-error);
+}
+
+crs-router {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
