@@ -17,6 +17,12 @@
       "hasStyle": true
     },
     {
+      "title": "Grid Editing",
+      "hash": "#grid-editing",
+      "view": "grid-editing",
+      "hasStyle": true
+    },
+    {
       "title": "404",
       "hash": "#404",
       "view": "404",
