@@ -8,6 +8,7 @@ export default class GridEditing extends crsbinding.classes.ViewBase {
         crs.processSchemaRegistry.add(gridGenerateSchema);
 
         // 2. set the header content
+        header.args.context = this;
         await crs.intent.dom.set_widget(header);
 
         // 3. add translations required
@@ -41,6 +42,8 @@ export default class GridEditing extends crsbinding.classes.ViewBase {
 
     preLoad() {
         this.setProperty("rowCount", 10);
+        this.setProperty("progressMax", 100);
+        this.setProperty("progress", 0);
     }
 
     /**

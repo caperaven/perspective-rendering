@@ -12,29 +12,48 @@ const externalCodes = [
 ]
 
 export async function createDate(count, bId) {
-    let result = [];
+    return new Promise(resolve => {
+        crsbinding.data.setProperty(bId,"progressMax", count - 1);
+        crsbinding.data.setProperty(bId,"progress", 0);
+        let result = [];
 
-    for (let i = 0; i < count; i++) {
-        const id            = i;
-        const code          = await getRandomCode();
-        const description   = `Description for id: ${i}`;
-        const number        = await getRandomNumber();
-        const date          = await getRandomDate();
-        const duration      = await getRandomDuration();
-        const externalCode  = await getRandomExternalCode();
+        for (let i = 0; i < count; i++) {
+            crsbinding.idleTaskManager.add(async () => {
+                const id            = i;
+                const code          = await getRandomCode();
+                const description   = `Description for id: ${i}`;
+                const number        = await getRandomNumber(0, 10);
+                const date          = await getRandomDate();
+                const duration      = await getRandomDuration();
+                const externalCode  = await getRandomExternalCode();
 
-        result.push({
-            id              : id,
-            code            : code,
-            description     : description,
-            number          : number,
-            date            : date,
-            duration        : duration,
-            externalCode    : externalCode
-        })
-    }
+                result.push({
+                    id              : id,
+                    code            : code,
+                    description     : description,
+                    number          : number,
+                    date            : date,
+                    duration        : duration,
+                    externalCode    : externalCode
+                });
 
-    return result;
+                crsbinding.data.setProperty(bId,"progress", i);
+            })
+        }
+
+        const wait = () => {
+            if (result.length == count) {
+                crsbinding.data.setProperty(bId,"progress", 0);
+                resolve(result);
+            }
+
+            requestAnimationFrame(() => {
+                wait();
+            })
+        }
+
+        wait();
+    })
 }
 
 async function getRandomCode() {
