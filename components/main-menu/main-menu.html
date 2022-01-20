@@ -1,0 +1,39 @@
+<style>
+    main-menu {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 15rem;
+        bottom: 0;
+        background: var(--cl-panel-dark);
+        filter: drop-shadow(0 0 5px silver);
+        z-index: 9999999999;
+        transform: translateX(-20rem);
+        transition: transform 0.3s;
+        will-change: transition;
+    }
+
+    main-menu.open {
+        transform: translateX(0);
+    }
+
+    main-menu.open:before {
+        content: "";
+        position: absolute;
+        background: transparent;
+        bottom: 0;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        z-index: -2;
+    }
+</style>
+
+<template id="menu-item-template">
+    <li data-hash="${hash}">${title}</li>
+</template>
+
+<nav>
+    <ul></ul>
+</nav>

@@ -14,6 +14,7 @@
             --cl-panel: #f6f6f6;
             --cl-error: #b31414;
             --cl-primary: #323232;
+            --cl-panel-dark: #dedede;
         }
 
         html, body {
@@ -85,7 +86,9 @@
     <header>
         <button aria-label="menu" class="icon" click.setValue="$globals.isMenuOpen = !$globals.isMenuOpen" classlist.if="$globals.isMenuOpen == true ? 'highlight-fill'"><svg><use xlink:href="#menu" /></svg></button>
         <crs-widget id="header-widget"></crs-widget>
+        <main-menu role="menu" classlist.if="$globals.isMenuOpen ==  true? 'open'" click.setValue="$globals.isMenuOpen = !$globals.isMenuOpen" style="display: none"></main-menu>
     </header>
+
     <main>
         <crs-router routes="app/routes.json"></crs-router>
     </main>
@@ -95,6 +98,9 @@
         import "./node_modules/crs-binding/crs-binding.js";
         import "./node_modules/crs-router/crs-router.js";
         import "./node_modules/crs-process-api/crs-process-api.js";
+        import "./components/main-menu/main-menu.js";
+
+        crsbinding.parsers.parseElement(document.documentElement);
 
         await crs.intent.dom.set_widget({
             args: {
