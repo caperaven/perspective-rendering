@@ -1,4 +1,5 @@
-import {gridGenerateSchema} from "./schemas/generate.js";
+import { gridGenerateSchema, translations, header } from "./schemas/generate.js";
+import {createDate} from "./../../src/utils/data-factory.js";
 
 export default class GridEditing extends crsbinding.classes.ViewBase {
     async connectedCallback() {
@@ -7,24 +8,10 @@ export default class GridEditing extends crsbinding.classes.ViewBase {
         crs.processSchemaRegistry.add(gridGenerateSchema);
 
         // 2. set the header content
-        await crs.intent.dom.set_widget({
-            args: {
-                query: "#header-widget",
-                html: "$template.grid_editing_header",
-                url: "/templates/header-widgets/grid_editing.html"
-            }
-        })
+        await crs.intent.dom.set_widget(header);
 
         // 3. add translations required
-        await crsbinding.translations.add({
-            buttons: {
-                cancel: "Cancel",
-                ok: "Ok"
-            },
-            labels: {
-                rowCount: "Row count"
-            }
-        }, "grid_generate")
+        await crsbinding.translations.add(translations, "grid_generate")
     }
 
     async disconnectedCallback() {
@@ -54,5 +41,13 @@ export default class GridEditing extends crsbinding.classes.ViewBase {
 
     preLoad() {
         this.setProperty("rowCount", 10);
+    }
+
+    /**
+     * Called from process if the dialog input was validated and ok
+     * @returns {Promise<void>}
+     */
+    async update() {
+        console.log(this.records);
     }
 }

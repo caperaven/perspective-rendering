@@ -11,7 +11,7 @@ const externalCodes = [
     await getRandomCode(),
 ]
 
-export async function createDate(count) {
+export async function createDate(count, bId) {
     let result = [];
 
     for (let i = 0; i < count; i++) {
