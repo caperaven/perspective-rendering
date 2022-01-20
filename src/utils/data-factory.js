@@ -61,7 +61,7 @@ async function getRandomCode() {
 
     for (let i = 0; i < 6; i++) {
         const int = await crs.intent.random.integer({ args: {
-            min: 33,
+            min: 48,
             max: 122
         }})
 
