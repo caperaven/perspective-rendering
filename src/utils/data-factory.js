@@ -46,10 +46,11 @@ export async function createDate(count, bId) {
                 crsbinding.data.setProperty(bId,"progress", 0);
                 resolve(result);
             }
-
-            requestAnimationFrame(() => {
-                wait();
-            })
+            else {
+                requestAnimationFrame(() => {
+                    wait();
+                })
+            }
         }
 
         wait();

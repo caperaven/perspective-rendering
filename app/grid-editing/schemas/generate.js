@@ -40,10 +40,24 @@ export const gridGenerateSchema = {
                     fields: ["externalCode", "number"],
                     target: "$context.grouping"
                 },
-                next_step: "update",
                 binding_before: {
                     currentStep: "grouping data"
-                }
+                },
+                next_step: "add_to_store"
+            },
+
+            add_to_store: {
+                type: "db",
+                action: "create_data_dump",
+                args: {
+                    db: "perspective_data",
+                    table: "grid_editing",
+                    records: "$context.records"
+                },
+                binding_before: {
+                    currentStep: "cache data"
+                },
+                next_step: "update"
             },
 
             update: {
