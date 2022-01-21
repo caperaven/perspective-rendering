@@ -54,5 +54,6 @@ export default class GridEditing extends crsbinding.classes.ViewBase {
     async update() {
         console.log(this.records);
         console.log(this.grouping);
+        this.grouping = null;
     }
 }
