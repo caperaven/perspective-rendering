@@ -22,6 +22,11 @@ export default class GridEditing extends crsbinding.classes.ViewBase {
         // 2. remove translations no longer required
         await crsbinding.translations.delete("grid_generate");
 
+        // 3. clear the data store
+        await crs.intent.db.clear_table({ args: {
+
+            }})
+
         await super.disconnectedCallback();
     }
 

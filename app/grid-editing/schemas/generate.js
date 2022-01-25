@@ -50,8 +50,15 @@ export const gridGenerateSchema = {
                 type: "db",
                 action: "create_data_dump",
                 args: {
-                    db: "perspective_data",
-                    table: "grid_editing",
+                    name: "perspective_data",
+                    tables: {
+                        grid_editing: {
+                            indexes: {
+                                id: { unique: true }
+                            }
+                        }
+                    },
+                    store: "grid_editing",
                     records: "$context.records"
                 },
                 binding_before: {

@@ -41,13 +41,16 @@ export async function createDate(count, bId) {
             })
         }
 
+        let frameId;
+
         const wait = () => {
             if (result.length == count) {
                 crsbinding.data.setProperty(bId,"progress", 0);
+                cancelAnimationFrame(frameId);
                 resolve(result);
             }
             else {
-                requestAnimationFrame(() => {
+                frameId = requestAnimationFrame(() => {
                     wait();
                 })
             }
