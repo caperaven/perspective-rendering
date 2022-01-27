@@ -1,0 +1,39 @@
+<style>
+    data-grid {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+
+    data-grid, data-grid * {
+        box-sizing: border-box;
+    }
+
+    data-grid .grid-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+    }
+
+    data-grid .group {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        padding: 0.5rem;
+        border-bottom: solid 1px silver;
+    }
+
+    data-grid .group div:first-child {
+        flex: 1;
+    }
+</style>
+
+<template id="group-template">
+    <div class="group">
+        <div>${caption}</div>
+        <div>count: ${count}</div>
+    </div>
+</template>
+
+<div class="grid-container"></div>

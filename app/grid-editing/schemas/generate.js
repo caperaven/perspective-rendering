@@ -43,7 +43,7 @@ export const gridGenerateSchema = {
                 binding_before: {
                     currentStep: "grouping data"
                 },
-                next_step: "add_to_store"
+                next_step: "add_to_store",
             },
 
             add_to_store: {
@@ -64,18 +64,20 @@ export const gridGenerateSchema = {
                 binding_before: {
                     currentStep: "cache data"
                 },
-                next_step: "update"
+                next_step: "update_grid"
             },
 
-            update: {
-                type: "action",
-                action: "$context.update",
+            update_grid: {
+                type: "dom",
+                action: "set_properties",
                 args: {
-                    parameters: []
+                    query: "data-grid",
+                    properties: {
+                        database: "perspective_data",
+                        store: "grid_editing",
+                        grouping: "$context.grouping"
+                    }
                 },
-                binding_before: {
-                    currentStep: "done"
-                }
             }
         }
     }

@@ -1,5 +1,5 @@
 import { gridGenerateSchema, translations, header } from "./schemas/generate.js";
-import {createDate} from "./../../src/utils/data-factory.js";
+import "./components/grid.js";
 
 export default class GridEditing extends crsbinding.classes.ViewBase {
     async connectedCallback() {
