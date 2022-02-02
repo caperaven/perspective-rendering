@@ -22,17 +22,32 @@
         width: 100%;
         padding: 0.5rem;
         border-bottom: solid 1px silver;
+        align-items: center;
     }
 
-    data-grid .group div:first-child {
+    data-grid .group div:nth-child(2) {
         flex: 1;
+        margin-left: 0.5rem;
+    }
+
+    data-grid [data-expandable] {
+        width: 1.5rem;
+        height: 1.5rem;
+        background: #dedede;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 0.5rem;
+        cursor: pointer;
     }
 </style>
 
 <template id="group-template">
     <div class="group">
+        <div>${field} :</div>
         <div>${caption}</div>
         <div>count: ${count}</div>
+        <div data-expandable="true" data-path="${path}" data-count="${count}" data-level="${level}">+</div>
     </div>
 </template>
 

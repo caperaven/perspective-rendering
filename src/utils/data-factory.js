@@ -11,7 +11,7 @@ const externalCodes = [
     await getRandomCode(),
 ]
 
-export async function createDate(count, bId) {
+export async function createData(count, bId) {
     return new Promise(resolve => {
         crsbinding.data.setProperty(bId,"progressMax", count - 1);
         crsbinding.data.setProperty(bId,"progress", 0);
@@ -64,10 +64,14 @@ async function getRandomCode() {
     let results = [];
 
     for (let i = 0; i < 6; i++) {
-        const int = await crs.intent.random.integer({ args: {
+        let int = await crs.intent.random.integer({ args: {
             min: 48,
             max: 122
-        }})
+        }});
+
+        if (int == 92) {
+            int = 90;
+        }
 
         results.push(int);
     }

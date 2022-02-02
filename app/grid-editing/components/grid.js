@@ -33,6 +33,10 @@ class DataGrid extends HTMLElement {
 
             this.gridContainer = this.querySelector(".grid-container");
         });
+
+        crsbinding.dom.enableEvents(this);
+
+        this.registerEvent(this, "click", this.gridClick.bind(this));
     }
 
     async disconnectedCallback() {
@@ -41,6 +45,7 @@ class DataGrid extends HTMLElement {
         this.store = null;
         this.database = null;
         this.gridContainer = null;
+        crsbinding.dom.enableEvents(this);
     }
 
     async update() {
@@ -51,16 +56,21 @@ class DataGrid extends HTMLElement {
         console.log(this.grouping);
 
         this.gridContainer.innerHTML = "";
-        await this.createParentGroupsFragment(this.grouping.root, null);
+        const fragment = await this.createParentGroupsFragment(this.grouping.root, "root", 0);
+        this.gridContainer.appendChild(fragment);
     }
 
-    async createParentGroupsFragment(parentGroup, selectedElement) {
+    async createParentGroupsFragment(parentGroup, path, level) {
         const keys = Object.keys(parentGroup.children);
         let groupData = [];
         for (let key of keys) {
+            const child = parentGroup.children[key];
             groupData.push({
+                field: child["field"],
                 caption: key,
-                count: parentGroup.children[key]["child_count"]
+                count: child["child_count"],
+                path: `${path}/c["${key}"]/`,
+                level: level
             })
         }
 
@@ -69,7 +79,41 @@ class DataGrid extends HTMLElement {
             data: groupData,
         }});
 
-        this.gridContainer?.appendChild(fragment);
+        return fragment;
+    }
+
+    async gridClick(event) {
+        if (event.target.dataset.expandable === "true") {
+            const path = event.target.dataset.path.split("/c[").join(".children[").split("/").join("");
+            let fn = new Function("context", `return context.${path};`);
+            const obj = fn(this.grouping);
+            fn = null;
+
+            const fragment = await this.createParentGroupsFragment(obj, event.target.dataset.path, Number(event.target.dataset.level + 1));
+            const padding = `${(event.target.dataset.level + 1) * 24}px`;
+
+            for (let child of fragment.children) {
+                child.style.paddingLeft = padding;
+            }
+
+
+            const group = event.target.parentElement;
+            group.parentElement.insertBefore(fragment, group.nextElementSibling);
+
+            event.target.dataset.expandable = "false";
+            event.target.textContent = "-";
+        }
+        else if (event.target.dataset.expandable === "false") {
+            const count = event.target.dataset.count;
+            const group = event.target.parentElement;
+
+            for (let i = 0; i < count; i++) {
+                group.nextElementSibling.parentElement.removeChild(group.nextElementSibling);
+            }
+
+            event.target.dataset.expandable = "true";
+            event.target.textContent = "+";
+        }
     }
 
 }
