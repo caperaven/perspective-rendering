@@ -61,23 +61,33 @@ class DataGrid extends HTMLElement {
     }
 
     async createParentGroupsFragment(parentGroup, path, level) {
-        const keys = Object.keys(parentGroup.children);
-        let groupData = [];
-        for (let key of keys) {
-            const child = parentGroup.children[key];
-            groupData.push({
-                field: child["field"],
-                caption: key,
-                count: child["child_count"],
-                path: `${path}/c["${key}"]/`,
-                level: level
-            })
-        }
+        let fragment;
 
-        const fragment = await crs.intent.dom.elements_from_template({ args: {
-            template_id: "grid-group-template",
-            data: groupData,
-        }});
+        if (parentGroup.children != null) {
+            const keys = Object.keys(parentGroup.children);
+            let groupData = [];
+            for (let key of keys) {
+                const child = parentGroup.children[key];
+                groupData.push({
+                    field: child["field"],
+                    caption: key,
+                    count: child["child_count"],
+                    path: `${path}/c["${key}"]/`,
+                    level: level
+                })
+            }
+
+            fragment = await crs.intent.dom.elements_from_template({ args: {
+                template_id: "grid-group-template",
+                data: groupData,
+            }});
+
+            const padding = `${(level) * 24}px`;
+
+            for (let child of fragment.children) {
+                child.style.paddingLeft = padding;
+            }
+        }
 
         return fragment;
     }
@@ -90,12 +100,6 @@ class DataGrid extends HTMLElement {
             fn = null;
 
             const fragment = await this.createParentGroupsFragment(obj, event.target.dataset.path, Number(event.target.dataset.level + 1));
-            const padding = `${(event.target.dataset.level + 1) * 24}px`;
-
-            for (let child of fragment.children) {
-                child.style.paddingLeft = padding;
-            }
-
 
             const group = event.target.parentElement;
             group.parentElement.insertBefore(fragment, group.nextElementSibling);
