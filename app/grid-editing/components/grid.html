@@ -40,6 +40,18 @@
         margin-left: 0.5rem;
         cursor: pointer;
     }
+
+    data-grid .grid {
+        display: grid;
+        grid-template-columns: 100px 200px 50px 1fr;
+        background: #f1f1f1;
+    }
+
+    data-grid .cell {
+        padding: 0.5rem;
+        border-bottom: solid 1px silver;
+        border-right: solid 1px silver;
+    }
 </style>
 
 <template id="group-template">

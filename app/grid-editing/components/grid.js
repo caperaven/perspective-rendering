@@ -36,7 +36,20 @@ class DataGrid extends HTMLElement {
 
         crsbinding.dom.enableEvents(this);
 
+        await crs.intent.dom.create_inflation_template({args: {
+            template_id: "tpl_grid-cells",
+            tag: "div",
+            source: {
+                code:           {classes: ["cell"]},
+                description:    {classes: ["cell"]},
+                number:         {classes: ["cell"]},
+                date:           {classes: ["cell"]}
+            }
+        }});
+
+
         this.registerEvent(this, "click", this.gridClick.bind(this));
+        this.registerEvent(this, "dblclick", this.gridDblClick.bind(this));
     }
 
     async disconnectedCallback() {
@@ -45,7 +58,13 @@ class DataGrid extends HTMLElement {
         this.store = null;
         this.database = null;
         this.gridContainer = null;
+
+        if (this.db != null) {
+            await crs.intent.db.close({args: {db: this.db}});
+            this.db = null;
+        }
         crsbinding.dom.enableEvents(this);
+        crsbinding.inflationManager.unregister("tpl_grid-cells");
     }
 
     async update() {
@@ -87,9 +106,37 @@ class DataGrid extends HTMLElement {
             for (let child of fragment.children) {
                 child.style.paddingLeft = padding;
             }
-        }
 
-        return fragment;
+            return fragment;
+        }
+        else if (parentGroup.rows != null) {
+            if (this.db == null) {
+                await this._openDatabase();
+            }
+
+            let rows = await crs.intent.db.get_from_index({args: {
+                db: this.db,
+                store: this.store,
+                keys: parentGroup.rows
+            }});
+
+            fragment = await crs.intent.dom.elements_from_template({args: {
+                template_id: "tpl_grid-cells",
+                data: rows
+            }})
+
+            const element = document.createElement("div");
+            element.classList.add("grid");
+            element.appendChild(fragment);
+            return element;
+        }
+    }
+
+    async _openDatabase() {
+        this.db = await crs.intent.db.open({ args: {
+            name: this.database,
+            version: 1
+        }})
     }
 
     async gridClick(event) {
@@ -100,6 +147,10 @@ class DataGrid extends HTMLElement {
             fn = null;
 
             const fragment = await this.createParentGroupsFragment(obj, event.target.dataset.path, Number(event.target.dataset.level + 1));
+
+            if (fragment instanceof HTMLDivElement) {
+                event.target.dataset.count = 1;
+            }
 
             const group = event.target.parentElement;
             group.parentElement.insertBefore(fragment, group.nextElementSibling);
@@ -120,6 +171,19 @@ class DataGrid extends HTMLElement {
         }
     }
 
+    async gridDblClick(event) {
+        const element = event.target;
+        const rows = await crs.intent.datafactory.perform({
+            args: {count: 1, bId: this.bId}
+        })
+
+        await crs.intent.dom.update_cells({ args: {
+            template_id     : "tpl_grid-cells",
+            data            : rows,
+            parent          : element.parentElement,
+            row_index       : 0
+        }}, this)
+    }
 }
 
 customElements.define("data-grid", DataGrid);

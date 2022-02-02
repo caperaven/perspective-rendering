@@ -75,7 +75,8 @@ export const gridGenerateSchema = {
                     properties: {
                         database: "perspective_data",
                         store: "grid_editing",
-                        grouping: "$context.grouping"
+                        grouping: "$context.grouping",
+                        bId: "$bId"
                     }
                 },
             }
